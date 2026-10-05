@@ -831,6 +831,10 @@ def main():
 
     if USE_WEBHOOK:
         app = web.Application()
+        async def health_check(request):
+            return web.Response(text="OK")
+        app.router.add_get("/", health_check)
+        app.router.add_get("/health", health_check)
         SimpleRequestHandler(dispatcher=dp, bot=bot).register(
             app, path=f"{WEBHOOK_PATH}/{BOT_TOKEN}")
         setup_application(app, dp, bot=bot)
